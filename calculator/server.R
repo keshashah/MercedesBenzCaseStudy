@@ -1,8 +1,10 @@
-# Define server logic required to draw a histogram ----
+# Define server logic required --
 server <- function(input, output) {
   
+  # To turn off numeric output in scientific notations.. View whole numbers.
+  options(scipen=999)
+  
   # Output for Tab-0 i.e. industry
-  #Output for Tab-0 i.e. Industry
   output$industry <- renderText({
     "According to Recent Study, 10-point increase in turnover costs avg dealership €500,000 in gross profit annually.
     Multiplied by about 16,500 dealerships in the entire Europe, it's an €8 billion-plus problem !!"
@@ -52,13 +54,13 @@ server <- function(input, output) {
   
   output$industry2 <- renderText({
     "Dealer's Profitability      = function1(Attrition Of Sales Employee);
-    Attrition Of Sales Employee = function2(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
-    Car Sale Capacity           = function3(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
-    Interest Rates, Insurance Costs, Emission Rules, Export/Import);
-    Non-Dealer Factors          = fucntion4(Technology, New Cars Launched, Organizational Model Change);
-    Voluntary Termination       = function5(Good Attrition, Bad Attrition);
-    = function6(Fresher Attrition, Infant Attrition, 
-    Key Employees Attrition, Non-performer Attrition);"
+Attrition Of Sales Employee = function2(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
+Car Sale Capacity           = function3(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
+Interest Rates, Insurance Costs, Emission Rules, Export/Import);
+Non-Dealer Factors          = fucntion4(Technology, New Cars Launched, Organizational Model Change);
+Voluntary Termination       = function5(Good Attrition, Bad Attrition);
+                            = function6(Fresher Attrition, Infant Attrition, 
+                                        Key Employees Attrition, Non-performer Attrition);"
   })
   
   # Output for Tab-1 i.e. bottomline
@@ -74,14 +76,14 @@ server <- function(input, output) {
   })  
   
   blcolor <- reactive({
-    ifelse(9000*150*30*(0.4-input$attritionRate/100) < 0, "red", "green")
+    ifelse(input$turnovercost*150*30*(0.4-input$attritionRate/100) < 0, "red", "green")
   })
   
   
   output$bottomline1 <- renderText({
     paste('<span style=\"color:', blcolor() , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'% <br>
-          will result in change of bottom-line by €',9000*150*30*(0.4-input$attritionRate/100),'<br><br>
-          As per Diamler Group 2018 Financial Report, it will impact <br>Return on Sales by ',9000*150*30*(0.4-input$attritionRate/100)/10824000*7.8,'% </span>')
+          will result in change of bottom-line by €',input$turnovercost*150*30*(0.4-input$attritionRate/100),'<br><br>
+          As per Diamler Group 2018 Financial Report, it will impact <br>Return on Sales by ',input$turnovercost*150*30*(0.4-input$attritionRate/100)/10824000*7.8,'% </span>')
   })
   
   output$bottomline2 <- renderText({
@@ -92,10 +94,10 @@ server <- function(input, output) {
           Average number of sales employees         = 30  
           Number of Mercedes Benz Dealers in Germany     = 150
           
-          At 40 % attrition rate, the cost to dealership = €',as.numeric(9000*150*30*0.4),'
-          At',input$attritionRate,'% attrition rate, the cost to dealership = €',9000*150*30*input$attritionRate/100
+          At 40 % attrition rate, the cost to dealership = €',as.numeric(input$turnovercost*150*30*0.4),'
+          At',input$attritionRate,'% attrition rate, the cost to dealership = €',input$turnovercost*150*30*input$attritionRate/100
     )
-  }) 
+  })
   
   # Output for Tab-2 i.e. sales
   output$sales <- renderText({

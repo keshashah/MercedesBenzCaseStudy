@@ -21,7 +21,17 @@ ui <- fluidPage(
                   label = "New Attrition Rate:",
                   min = 1,
                   max = 100,
-                  value = 20)
+                  value = 20),
+      
+      br(),
+      
+      h4("What-If Analysis (Other Inputs' Sensitivity):"),
+      br(),
+      h5("Bottom-line Sensitivity:"),
+      # Input: Numeric entry for number of obs to view ----
+      numericInput(inputId = "turnovercost",
+                   label = "Cost of 1 Sales Employee Turnover (in €) :",
+                   value = 9000)
       
     ),
     
