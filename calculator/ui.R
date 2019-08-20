@@ -1,5 +1,6 @@
 library(shiny)
 library(googleVis)
+library(plotrix)
 
 ui <- fluidPage(
   
@@ -29,7 +30,7 @@ ui <- fluidPage(
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
                   tabPanel("Industry Comparision", br(), verbatimTextOutput("industry"), plotOutput("industry1"), verbatimTextOutput("industry2")),
-                  tabPanel("Bottom-Line (MB)",br(), verbatimTextOutput("bottomline")),
+                  tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
                   tabPanel("Sales (MB)", br(), verbatimTextOutput("sales")),
                   tabPanel("Customers (MB)", br(), verbatimTextOutput("customers")),
                   tabPanel("Employees (MB)", br(), verbatimTextOutput("employees")),

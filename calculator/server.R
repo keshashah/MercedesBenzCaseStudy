@@ -63,8 +63,39 @@ server <- function(input, output) {
   
   # Output for Tab-1 i.e. bottomline
   output$bottomline <- renderText({
-    "Show bottomline here"
+    "Attrition has a major fall-out on the bottom-line. 
+    Bottom-Line = function(Hard costs, Soft costs);
+    Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
+    from creating new position, posting advertisement, checking resume of applicants, interviewing candidates 
+    to onbarding and training selected candidates.
+    Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
+    lost sales, unanswered customer calls, decrease in customer satisfaction index, morale of remaining employees
+    down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
   })  
+  
+  blcolor <- reactive({
+    ifelse(9000*150*30*(0.4-input$attritionRate/100) < 0, "red", "green")
+  })
+  
+  
+  output$bottomline1 <- renderText({
+    paste('<span style=\"color:', blcolor() , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'% <br>
+          will result in change of bottom-line by €',9000*150*30*(0.4-input$attritionRate/100),'<br><br>
+          As per Diamler Group 2018 Financial Report, it will impact <br>Return on Sales by ',9000*150*30*(0.4-input$attritionRate/100)/10824000*7.8,'% </span>')
+  })
+  
+  output$bottomline2 <- renderText({
+    paste('Brief Calculation:
+          
+          At an average dealership:
+          Cost of 1 employee turnover               = €',input$turnovercost,'
+          Average number of sales employees         = 30  
+          Number of Mercedes Benz Dealers in Germany     = 150
+          
+          At 40 % attrition rate, the cost to dealership = €',as.numeric(9000*150*30*0.4),'
+          At',input$attritionRate,'% attrition rate, the cost to dealership = €',9000*150*30*input$attritionRate/100
+    )
+  }) 
   
   # Output for Tab-2 i.e. sales
   output$sales <- renderText({
