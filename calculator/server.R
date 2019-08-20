@@ -111,8 +111,48 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
   
   # Output for Tab-4 i.e. employees
   output$employees <- renderText({
-    "Show employees here"
+    "The attrition rate among organizations is contagious and triggers chain reaction.
+    A high attrition rate will lead to more people leaving the organization, while
+    lower attrition will act as retention strategy.
+
+1. Co-employees need to cope-up and work overtime to maintain the same productivity for dealer and sell more cars.
+2. Existing employees are more aware of outside job opportunities from network of former colleagues."
   })  
+  
+  
+  empcolor <- reactive({
+    ifelse(input$attritionRate > 40, "red", "green")
+  })
+  
+ 
+  
+  newrate <- reactive({
+    ifelse(
+           input$attritionRate > 40, 
+           max(0,round(input$attritionRate + (100*(input$attritionRate-40)/(100-input$attritionRate)/(100-input$attritionRate)),digits=0)),
+           min(100,round(input$attritionRate + (100*(input$attritionRate-40)/(input$attritionRate*input$attritionRate)),digits=0))
+           )
+  })
+  
+  output$employees1 <- renderText({
+    paste('<span style=\"color:', empcolor() , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'%
+          MAGNIFY Attrition Rate to',newrate(),'% soon.<br></span>
+          <br>Thoughts of remaining employees: </h3>')
+  })
+  
+  sample_employee_emotion <- data.frame(name = c("Job satisfaction", "Salary", "Perks", "Work environment",
+                                                   "Co-employees", "relation", "Work Pressure", "Family situation","Health condition",
+                                                   "Competency", "Tenure", "Poor Motivation", "Insurance", "Peer",
+                                                 "Attrition","Performers", "new ideas", "competition", "manager",
+                                                 "Workload","Stress","Process","Job","Organization","Responsibilities",
+                                                 "mismatch","dissatisfaction","appreciation","management","overwork",
+                                                 "Work-Life","Balance","Trust","Support"),
+                                          value = c(10, 8, 5, 7, 6, 8, 9, 3, 2, 5, 6, 11, 6,15,12,13,3,11, 14,15,
+                                                    12, 8,6,9,13,10,7,8,9,10,14,11,15,15))
+  
+  # Radar Chart
+  output$employee2 <- renderWordcloud("wc_div", data = sample_employee_emotion, shape = 'circle',
+                  grid_size = 5, sizeRange = c(10, 60))
   
   # Output for Tab-4 i.e. employees
   output$stock <- renderText({
@@ -130,4 +170,5 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
                            redFrom=20.1, redTo=60, width=300, height=300));  
     
   }) 
+  
 }

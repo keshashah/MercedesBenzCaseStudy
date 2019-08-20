@@ -1,0 +1,10 @@
+name: calculator
+title:
+username:
+account: intrapreneurshipinitiative
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1096483
+bundleId: 2337335
+url: https://intrapreneurshipinitiative.shinyapps.io/calculator/
+when: 1566300848.4072

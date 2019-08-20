@@ -4,6 +4,9 @@ library(plotrix)
 
 ui <- fluidPage(
   
+  # We HAVE TO to load the ECharts javascript library in advance
+  loadEChartsLibrary(),
+  
   # App title ----
   titlePanel("Mercedes Benz Dealership Sales Employee Attrition Impact Analysis"),
   
@@ -37,13 +40,14 @@ ui <- fluidPage(
     
     # Main panel for displaying outputs ----
     mainPanel(
+      
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
                   tabPanel("Industry Comparision", br(), verbatimTextOutput("industry"), plotOutput("industry1"), verbatimTextOutput("industry2")),
                   tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
                   tabPanel("Sales (MB)", br(), verbatimTextOutput("sales")),
                   tabPanel("Customers (MB)", br(), verbatimTextOutput("customers")),
-                  tabPanel("Employees (MB)", br(), verbatimTextOutput("employees")),
+                  tabPanel("Employees (MB)", br(), verbatimTextOutput("employees"), h3(htmlOutput("employees1")), column(6, tags$div(id="wc_div", style="width:480px;height:480px;"), deliverChart("employee2"))),
                   tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), htmlOutput("stock1"))
       )
     )
