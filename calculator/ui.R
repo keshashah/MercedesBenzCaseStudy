@@ -27,7 +27,7 @@ ui <- fluidPage(
     mainPanel(
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
-                  tabPanel("Industry Comparision", br(), verbatimTextOutput("industry")),
+                  tabPanel("Industry Comparision", br(), verbatimTextOutput("industry"), plotOutput("industry1"), verbatimTextOutput("industry2")),
                   tabPanel("Bottom-Line (MB)",br(), verbatimTextOutput("bottomline")),
                   tabPanel("Sales (MB)", br(), verbatimTextOutput("sales")),
                   tabPanel("Customers (MB)", br(), verbatimTextOutput("customers")),
