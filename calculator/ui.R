@@ -47,8 +47,8 @@ ui <- fluidPage(
                   tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
                   tabPanel("Sales (MB)", br(), verbatimTextOutput("sales")),
                   tabPanel("Customers (MB)", br(), verbatimTextOutput("customers")),
-                  tabPanel("Employees (MB)", br(), verbatimTextOutput("employees"), h3(htmlOutput("employees1")), column(6, tags$div(id="wc_div", style="width:480px;height:480px;"), deliverChart("employee2"))),
-                  tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), htmlOutput("stock1"))
+                  tabPanel("Employees (MB)", br(), verbatimTextOutput("employees"), h3(htmlOutput("employees1")), column(5, tags$div(id="wc_div", style="width:400px;height:400px;position: relative;top: -20px;"), deliverChart("wc_div"))),
+                  tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), br(), h3(htmlOutput("stock1")), htmlOutput("stock2"))
       )
     )
     

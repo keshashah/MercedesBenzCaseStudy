@@ -119,12 +119,9 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
 2. Existing employees are more aware of outside job opportunities from network of former colleagues."
   })  
   
-  
   empcolor <- reactive({
     ifelse(input$attritionRate > 40, "red", "green")
   })
-  
- 
   
   newrate <- reactive({
     ifelse(
@@ -146,23 +143,35 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
                                                  "Attrition","Performers", "new ideas", "competition", "manager",
                                                  "Workload","Stress","Process","Job","Organization","Responsibilities",
                                                  "mismatch","dissatisfaction","appreciation","management","overwork",
-                                                 "Work-Life","Balance","Trust","Support"),
+                                                 "Work-Life","Balance","Trust","Support","Opportunities","Job Hunt"),
                                           value = c(10, 8, 5, 7, 6, 8, 9, 3, 2, 5, 6, 11, 6,15,12,13,3,11, 14,15,
-                                                    12, 8,6,9,13,10,7,8,9,10,14,11,15,15))
+                                                    12, 8,6,9,13,10,7,8,9,10,14,11,13,10,15,15))
   
   # Radar Chart
   output$employee2 <- renderWordcloud("wc_div", data = sample_employee_emotion, shape = 'circle',
-                  grid_size = 5, sizeRange = c(10, 60))
+                  grid_size = 5, sizeRange = c(10, 30))
   
   # Output for Tab-4 i.e. employees
   output$stock <- renderText({
     paste("The attrition change from 40% to", input$attritionRate, "%.
           Thus a change in attrition amongst sales employees by ",input$attritionRate-40,"% has a direct impact on 
-          market sentiments and thus stock price of Mercedes Benz")
+          market sentiments and thus stock price of Mercedes Benz.")
   })  
   
+  stockcolor <- reactive({
+    ifelse(input$attritionRate < 30, "green", ifelse(input$attritionRate < 60,"Orange","red"))
+  })
+  
+  stockSentiment <- reactive({
+    ifelse(input$attritionRate < 30, "Positive", ifelse(input$attritionRate < 60,"Neutral","Negative"))
+  })
+  
+  output$stock1 <- renderText({
+    paste('Market Sentiment Meter: <span style=\"color:', stockcolor() ,'\">',stockSentiment(),'</span>')
+  })
+    
   # Showing market sentiment ----
-  output$stock1 <- renderGvis({
+  output$stock2 <- renderGvis({
     df1 <- data.frame(Label = "Attrition Change", Value = input$attritionRate-40)
     gvisGauge(df1,
               options=list(min= -40 , max=60, greenFrom=-40,
