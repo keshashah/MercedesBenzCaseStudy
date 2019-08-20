@@ -83,6 +83,18 @@ server <- function(input, output) {
   
   # Output for Tab-4 i.e. employees
   output$stock <- renderText({
-    "Show stock here"
+    paste("The attrition change from 40% to", input$attritionRate, "%.
+          Thus a change in attrition amongst sales employees by ",input$attritionRate-40,"% has a direct impact on 
+          market sentiments and thus stock price of Mercedes Benz")
   })  
+  
+  # Showing market sentiment ----
+  output$stock1 <- renderGvis({
+    df1 <- data.frame(Label = "Attrition Change", Value = input$attritionRate-40)
+    gvisGauge(df1,
+              options=list(min= -40 , max=60, greenFrom=-40,
+                           greenTo=-10, yellowFrom=-9.99, yellowTo=20,
+                           redFrom=20.1, redTo=60, width=300, height=300));  
+    
+  }) 
 }

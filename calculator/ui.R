@@ -1,4 +1,5 @@
 library(shiny)
+library(googleVis)
 
 ui <- fluidPage(
   
