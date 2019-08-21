@@ -2,6 +2,7 @@ library(shiny)
 library(googleVis)
 library(plotrix)
 library(plotly)
+library(ECharts2Shiny)
 
 ui <- fluidPage(
   

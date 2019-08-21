@@ -1,0 +1,10 @@
+name: calculator
+title:
+username:
+account: intrapreurkesha
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1101998
+bundleId: 2340514
+url: https://intrapreurkesha.shinyapps.io/calculator/
+when: 1566378660.99281
