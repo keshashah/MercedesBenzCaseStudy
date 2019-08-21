@@ -101,7 +101,50 @@ Soft cost are difficult to quantify as they are due to the lost opportunity cost
   
   # Output for Tab-2 i.e. sales
   output$sales <- renderText({
-    "Show sales here"
+    "Change in attrition rate of sales employees impacts the sales twofold - number of leads & conversion to sales. 
+    A decrease(increase) in attrition rate increase(decreases) sales by attracting(losing) more leads as well as
+    doing a better(poor) job of converting existing leads to successful sales."
+  })  
+  
+  empret <- reactive({round(1-(input$attritionRate/100),digits = 2)})
+   
+  ZeroAttritionRate <- c(round(30*1*0.6,digits = 2), round(30*1*0.6*0.25,digits=2), round(30*1*0.6*0.25*0.7,digits = 2), round(30*1*0.6*0.25*0.7*0.6,digits = 2))
+  OldAttritionRate <- c(round(30*0.6*0.6,digits = 2), round(30*0.6*0.6*0.25,digits=2), round(30*0.6*0.6*0.25*0.7,digits = 2), round(30*0.6*0.6*0.25*0.7*0.6,digits = 2))
+  NewAttritionRate <-  reactive({
+    c(round(30*empret()*0.6,digits = 2), round(30*empret()*0.6*0.25,digits=2), round(30*empret()*0.6*0.25*0.7,digits = 2), round(30*empret()*0.6*0.25*0.7*0.6,digits = 2))
+  })
+  
+  salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
+  
+  observeEvent(input$attritionRate, {
+    salesFunneldat$df_data <- data.frame(ZeroAttritionRate, OldAttritionRate, NewAttritionRate())
+    row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
+    renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "circle", line.width = 5, theme = "shine")
+  })
+ 
+  output$sales2 <- renderText({
+    "Knowing conversion rate in sales funnel, profit per sale and sales commision based on front end gross profits as expense, 
+we can calculate the return on investment(ROI) for retaining a sales employee.
+    
+Return on Investment (ROI)=  (Profit from Sales – Expense Incurred for Sale) / Expense Incurred for Sale;
+where 
+    Expense Incurred for Sale = function1(Fixed cost, Variable cost)
+    Variable cost = function2(Salary of sales employees = minimum fixed base wage + variable sales commisions)"
+  }) 
+  
+  roi<- reactive({  0.078*(40-input$attritionRate)  })
+  
+  salescolor <-reactive({
+    ifelse(roi() < 0, "red", "green")
+  })
+  
+  salessentiment <- reactive({
+    ifelse(roi() < 0, "NEGATIVELY", "POSITIVELY")
+  })
+  
+  output$sales3 <- renderText({
+    paste('<span style=\"color:', salescolor() , '\"> Change in ROI = ',roi(),'% when attrition changes from 40 % to ',input$attritionRate,'%, thus ',salessentiment(),
+' impacting dealer profitability.</span>')
   })  
   
   # Output for Tab-3 i.e. customers
@@ -110,15 +153,15 @@ Soft cost are difficult to quantify as they are due to the lost opportunity cost
 Studies have shown that even most loyal customers may see sales employee departure as a reason to consider 
 competitive offereing.
 
-Mercedes Benz is trying to reduce the reliance of particular sales employee, by asking dealers to having multiple 
-connections between potential customers and sales employees. It has also developed a centralized platform for 
-capturing customer preferences and tracking sale pipeline, thus ensuring essential information is not lost with 
-departing employee.
+Mercedes Benz is trying to reduce the reliance of particular sales employee by-
+  1. Asking dealers to having multiple connections between potential customers and sales employees. 
+  2. Having centralized platform for capturing customer preferences and tracking sale pipeline.
+Thus it tries to ensure essential information is not lost with departing employee.
 
-While this works for Cold leads, Hot leads are still severly impacted</h4> by attrition of sales employees as below:')
+While this works for Cold leads, "Hot leads" are still severly impacted by attrition of sales employees as below:')
   })  
   
-  CustomerType <- c("Customers Retained", "Lost Level1 Leads", "Lost Level2 Leads", "New Prospects")
+  CustomerType <- c("Customers Retained", "Lost Level1 Prospects", "Lost Level2 Prospects", "New Leads")
   newEmpCount <- reactive ({30-(round(input$attritionRate*30/100))})
   oldAttr <- c(72, 120, 300, 900)
   newAttr <- reactive ({ c(newEmpCount()*4,(30-newEmpCount())*10,(30-newEmpCount())*25,newEmpCount()*50) })

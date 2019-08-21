@@ -42,11 +42,12 @@ ui <- fluidPage(
     # Main panel for displaying outputs ----
     mainPanel(
       
+        
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
                   tabPanel("Industry Comparision", br(), verbatimTextOutput("industry"), plotOutput("industry1"), verbatimTextOutput("industry2")),
                   tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
-                  tabPanel("Sales (MB)", br(), verbatimTextOutput("sales")),
+                  tabPanel("Sales (MB)", verbatimTextOutput("sales2"), h3(htmlOutput("sales3")), verbatimTextOutput("sales"),br(),column(6,tags$div(id="sales1", style="width:500px;height:400px;position: relative;top: -20px;"), deliverChart(div_id = "sales1"))),
                   tabPanel("Customers (MB)", br(), verbatimTextOutput("customers"),plotlyOutput("customers1")),
                   tabPanel("Employees (MB)", br(), verbatimTextOutput("employees"), h3(htmlOutput("employees1")), column(5, tags$div(id="wc_div", style="width:400px;height:400px;position: relative;top: -20px;"), deliverChart("wc_div"))),
                   tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), br(), h3(htmlOutput("stock1")), htmlOutput("stock2"))
