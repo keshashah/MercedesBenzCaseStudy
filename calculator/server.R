@@ -56,7 +56,7 @@ server <- function(input, output) {
     "Dealer's Profitability      = function1(Attrition Of Sales Employee);
 Attrition Of Sales Employee = function2(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
 Car Sale Capacity           = function3(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
-Interest Rates, Insurance Costs, Emission Rules, Export/Import);
+                                        Interest Rates, Insurance Costs, Emission Rules, Export/Import);
 Non-Dealer Factors          = function4(Technology, New Cars Launched, Organizational Model Change);
 Voluntary Termination       = function5(Good Attrition, Bad Attrition);
                             = function6(Fresher Attrition, Infant Attrition, 
