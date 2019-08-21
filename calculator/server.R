@@ -67,9 +67,11 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
   output$bottomline <- renderText({
     "Attrition has a major fall-out on the bottom-line. 
     Bottom-Line = function(Hard costs, Soft costs);
+
 Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
     from creating new position, posting advertisement, checking resume of applicants, interviewing candidates 
     to onbarding and training selected candidates.
+
 Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
     lost sales, unanswered customer calls, decrease in customer satisfaction index, morale of remaining employees
     down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
@@ -100,30 +102,8 @@ Soft cost are difficult to quantify as they are due to the lost opportunity cost
   })
   
   # Output for Tab-2 i.e. sales
-  output$sales <- renderText({
-    "Change in attrition rate of sales employees impacts the sales twofold - number of leads & conversion to sales. 
-    A decrease(increase) in attrition rate increase(decreases) sales by attracting(losing) more leads as well as
-    doing a better(poor) job of converting existing leads to successful sales."
-  })  
-  
-  empret <- reactive({round(1-(input$attritionRate/100),digits = 2)})
-   
-  ZeroAttritionRate <- c(round(30*1*0.6,digits = 2), round(30*1*0.6*0.25,digits=2), round(30*1*0.6*0.25*0.7,digits = 2), round(30*1*0.6*0.25*0.7*0.6,digits = 2))
-  OldAttritionRate <- c(round(30*0.6*0.6,digits = 2), round(30*0.6*0.6*0.25,digits=2), round(30*0.6*0.6*0.25*0.7,digits = 2), round(30*0.6*0.6*0.25*0.7*0.6,digits = 2))
-  NewAttritionRate <-  reactive({
-    c(round(30*empret()*0.6,digits = 2), round(30*empret()*0.6*0.25,digits=2), round(30*empret()*0.6*0.25*0.7,digits = 2), round(30*empret()*0.6*0.25*0.7*0.6,digits = 2))
-  })
-  
-  salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
-  
-  observeEvent(input$attritionRate, {
-    salesFunneldat$df_data <- data.frame(ZeroAttritionRate, OldAttritionRate, NewAttritionRate())
-    row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
-    renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "circle", line.width = 5, theme = "shine")
-  })
- 
   output$sales2 <- renderText({
-    "Knowing conversion rate in sales funnel, profit per sale and sales commision based on front end gross profits as expense, 
+    "Knowing conversion rate in sales funnel, profit per sale and sales commision paid to employees as expense, 
 we can calculate the return on investment(ROI) for retaining a sales employee.
     
 Return on Investment (ROI)=  (Profit from Sales – Expense Incurred for Sale) / Expense Incurred for Sale;
@@ -147,13 +127,35 @@ where
 ' impacting dealer profitability.</span>')
   })  
   
+  output$sales <- renderText({
+    "Change in attrition rate of sales employees impacts the sales twofold - 1. number of leads 2. conversion to sales. 
+    A decrease(increase) in attrition rate will increase(decreases) sales by attracting(losing) more leads as well as
+    doing a better(poor) job of converting existing leads to successful sales."
+  })  
+  
+  empret <- reactive({round(1-(input$attritionRate/100),digits = 2)})
+  
+  ZeroAttritionRate <- c(round(30*1*0.6,digits = 2), round(30*1*0.6*0.25,digits=2), round(30*1*0.6*0.25*0.7,digits = 2), round(30*1*0.6*0.25*0.7*0.6,digits = 2))
+  OldAttritionRate <- c(round(30*0.6*0.6,digits = 2), round(30*0.6*0.6*0.25,digits=2), round(30*0.6*0.6*0.25*0.7,digits = 2), round(30*0.6*0.6*0.25*0.7*0.6,digits = 2))
+  NewAttritionRate <-  reactive({
+    c(round(30*empret()*0.6,digits = 2), round(30*empret()*0.6*0.25,digits=2), round(30*empret()*0.6*0.25*0.7,digits = 2), round(30*empret()*0.6*0.25*0.7*0.6,digits = 2))
+  })
+  
+  salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
+  
+  observeEvent(input$attritionRate, {
+    salesFunneldat$df_data <- data.frame(ZeroAttritionRate, OldAttritionRate, NewAttritionRate())
+    row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
+    renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "circle", line.width = 5, theme = "shine")
+  })
+  
   # Output for Tab-3 i.e. customers
   output$customers <- renderText({
-    paste('Customers trust salesperson who has in-depth knowledge of all car models or have participated in long sales-cycle.
+    paste('Customers trust salesperson who has in-depth knowledge of all models and have participated in long sales-cycle.
 Studies have shown that even most loyal customers may see sales employee departure as a reason to consider 
 competitive offereing.
 
-Mercedes Benz is trying to reduce the reliance of particular sales employee by-
+Mercedes Benz is trying to reduce the reliance on a particular sales employee by-
   1. Asking dealers to having multiple connections between potential customers and sales employees. 
   2. Having centralized platform for capturing customer preferences and tracking sale pipeline.
 Thus it tries to ensure essential information is not lost with departing employee.
@@ -176,7 +178,6 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
       layout(yaxis = list(title = 'Monthly Customers/Dealer',type='log'), barmode = 'group')
   })  
 
-  
   # Output for Tab-4 i.e. employees
   output$employees <- renderText({
     "The attrition rate among organizations is contagious and triggers chain reaction.
@@ -194,8 +195,8 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
   newrate <- reactive({
     ifelse(
            input$attritionRate > 40, 
-           max(0,round(input$attritionRate + (100*(input$attritionRate-40)/(100-input$attritionRate)/(100-input$attritionRate)),digits=0)),
-           min(100,round(input$attritionRate + (100*(input$attritionRate-40)/(input$attritionRate*input$attritionRate)),digits=0))
+           min(100,round(input$attritionRate + (100*(input$attritionRate-40)/(100-input$attritionRate)/(100-input$attritionRate)),digits=0)),
+           max(0,round(input$attritionRate + (100*(input$attritionRate-40)/(input$attritionRate*input$attritionRate)),digits=0))
            )
   })
   
@@ -245,7 +246,5 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
               options=list(min= -40 , max=60, greenFrom=-40,
                            greenTo=-10, yellowFrom=-9.99, yellowTo=20,
                            redFrom=20.1, redTo=60, width=300, height=300));  
-    
   }) 
-  
 }

@@ -27,9 +27,7 @@ ui <- fluidPage(
                   min = 1,
                   max = 100,
                   value = 20),
-      
       br(),
-      
       h4("What-If Analysis (Other Inputs' Sensitivity):"),
       h5("Bottom-line Sensitivity:"),
       # Input: Numeric entry for number of obs to view ----
@@ -37,13 +35,11 @@ ui <- fluidPage(
                    label = "Cost of 1 Sales Employee Turnover (in €) :",
                    value = 9000)
       
-      
     ),
     
     # Main panel for displaying outputs ----
     mainPanel(
       
-        
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
                   tabPanel("Industry Comparision", br(), verbatimTextOutput("industry"), plotOutput("industry1"), verbatimTextOutput("industry2")),
@@ -54,8 +50,6 @@ ui <- fluidPage(
                   tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), br(), h3(htmlOutput("stock1")), htmlOutput("stock2"))
       )
     )
-    
   )
-  
 )
       
