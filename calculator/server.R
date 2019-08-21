@@ -77,13 +77,8 @@ Soft cost are difficult to quantify as they are due to the lost opportunity cost
     down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
   })  
   
-  blcolor <- reactive({
-    ifelse(input$turnovercost*150*30*(0.4-input$attritionRate/100) < 0, "red", "green")
-  })
-  
-  
   output$bottomline1 <- renderText({
-    paste('<span style=\"color:', blcolor() , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'% <br>
+    paste('<span style=\"color:', ifelse(input$turnovercost*150*30*(0.4-input$attritionRate/100) < 0, "red", "green") , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'% <br>
           will result in change of bottom-line by €',input$turnovercost*150*30*(0.4-input$attritionRate/100),'<br><br>
           As per Diamler Group 2018 Financial Report, it will impact <br>Return on Sales by ',round(input$turnovercost*150*30*(0.4-input$attritionRate/100)/10824000*7.8,digits=2),'% </span>')
   })
@@ -112,18 +107,8 @@ where
     Variable cost = function2(Salary of sales employees = minimum fixed base wage + variable sales commisions)"
   }) 
   
-  roi<- reactive({  0.078*(40-input$attritionRate)  })
-  
-  salescolor <-reactive({
-    ifelse(roi() < 0, "red", "green")
-  })
-  
-  salessentiment <- reactive({
-    ifelse(roi() < 0, "NEGATIVELY", "POSITIVELY")
-  })
-  
   output$sales3 <- renderText({
-    paste('<span style=\"color:', salescolor() , '\"> Change in ROI = ',roi(),'% when attrition changes from 40 % to ',input$attritionRate,'%, thus ',salessentiment(),
+    paste('<span style=\"color:', ifelse(0.078*(40-input$attritionRate) < 0, "red", "green") , '\"> Change in ROI = ',0.078*(40-input$attritionRate),'% when attrition changes from 40 % to ',input$attritionRate,'%, thus ',ifelse(0.078*(40-input$attritionRate) < 0, "NEGATIVELY", "POSITIVELY"),
 ' impacting dealer profitability.</span>')
   })  
   
@@ -133,24 +118,13 @@ where
     doing a better(poor) job of converting existing leads to successful sales."
   })  
   
-  empret <- reactive({   round((1-(input$attritionRate/100)),digits=2)   })
-  empattr <- reactive({   1-empret() })
-  
-  leadconv <- reactive({ input$leadrate })
-  prospconv <- reactive({ leadconv()*input$prosprate/100 })
-  tdconv <- reactive({ prospconv()*input$tdrate/100 })
-  salesconv <- reactive({ tdconv()*input$salerate/100 })
-  
-  ZeroAttritionRate <- reactive({ c(round(1*leadconv(),digits = 2), round(1*prospconv(),digits=2), round(1*tdconv(),digits = 2), round(1*salesconv(),digits = 2)) })
-  OldAttritionRate <- reactive({ c(round(0.6*leadconv(),digits = 2), round(0.6*prospconv(),digits=2), round(0.6*tdconv(),digits = 2), round(0.6*salesconv(),digits = 2)) })
-  NewAttritionRate <-  reactive({
-    c(round(empret()*leadconv(),digits = 2), round(empret()*prospconv(),digits=2), round(empret()*tdconv(),digits = 2), round(empret()*salesconv(),digits = 2))
-  })
-  
   salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
   
   observeEvent(input$attritionRate, {
-    salesFunneldat$df_data <- data.frame(ZeroAttritionRate(), OldAttritionRate(), NewAttritionRate())
+    salesFunneldat$df_data <- data.frame(ZeroAttrition = c(round(1*input$leadrate,digits = 2), round(1*input$leadrate*input$prosprate/100,digits=2), round(1*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 2), round(1*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 2)), 
+                                         OldAttrition = c(round(0.6*input$leadrate,digits = 2), round(0.6*input$leadrate*input$prosprate/100,digits=2), round(0.6*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 2), round(0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 2)), 
+                                         NewAttrition = c(round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate,digits = 2), round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100,digits=2), round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 2), round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 2)))
+    
     row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
     
     renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "circle", line.width = 5, theme = "shine")
@@ -172,16 +146,17 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
   
   CustomerType <- c("New Leads", "Customers Retained", "Lost Prospects", "Lost Sales")
   
-  oldAttr <- reactive ({ c(30*0.6*leadconv(), 30*0.6*salesconv(), 30*0.4*prospconv(), 30*0.4*salesconv() )  })
-  newAttr <- reactive ({ c(30*empret()*leadconv(), 30*empret()*salesconv(),30*empattr()*prospconv(),30*empattr()*salesconv()) })
-  datacust <- reactive({ data.frame(CustomerType, oldAttr(), newAttr()) })
-  newname <- reactive({
-    renderText(paste(input$attritionRate,'% Attrition Rate'))
-  })
-
   output$customers1 <- renderPlotly({
-      plot_ly(data=datacust(), x = CustomerType, y = oldAttr(), type = 'bar', name = '40 % Attrition Rate') %>%
-      add_trace(y = newAttr(), name = 'New Attrition Rate') %>%
+      plot_ly(data=data.frame(CustomerType, 
+                              c(30*0.6*input$leadrate, 30*0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100, 30*0.4*input$leadrate*input$prosprate/100, 30*0.4*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100 ), 
+                              c(30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate, 30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100)), 
+              x = CustomerType, 
+              y = c(30*0.6*input$leadrate, 30*0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100, 30*0.4*input$leadrate*input$prosprate/100, 30*0.4*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100 ), 
+              type = 'bar', name = '40 % Attrition Rate') %>%
+      
+      add_trace(y = c(30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate, 30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100), 
+                name = 'New Attrition Rate') %>%
+      
       layout(yaxis = list(title = 'Monthly Customers/Dealer',type='log'), barmode = 'group')
   })  
 
@@ -195,21 +170,17 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
 2. Existing employees are more aware of outside job opportunities from network of former colleagues."
   })  
   
-  empcolor <- reactive({
-    ifelse(input$attritionRate > 40, "red", "green")
-  })
-  
-  newrate <- reactive({
-    ifelse(
-           input$attritionRate > 40, 
-           min(100,round(input$attritionRate + (100*(input$attritionRate-40)/(100-input$attritionRate)/(100-input$attritionRate)),digits=0)),
-           max(0,round(input$attritionRate + (100*(input$attritionRate-40)/(input$attritionRate*input$attritionRate)),digits=0))
-           )
-  })
-  
   output$employees1 <- renderText({
-    paste('<span style=\"color:', empcolor() , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'%
-          MAGNIFY Attrition Rate to',newrate(),'% soon.<br></span>
+    paste('<span style=\"color:', 
+              ifelse(input$attritionRate > 40, "red", "green")
+          , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'%
+          MAGNIFY Attrition Rate to',
+          ifelse(
+            input$attritionRate > 40, 
+            min(100,round(input$attritionRate + (100*(input$attritionRate-40)/(100-input$attritionRate)/(100-input$attritionRate)),digits=0)),
+            max(0,round(input$attritionRate + (100*(input$attritionRate-40)/(input$attritionRate*input$attritionRate)),digits=0))
+          )
+          ,'% soon.<br></span>
           <br>Thoughts of remaining employees: </h3>')
   })
   
@@ -233,17 +204,13 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
           Thus a change in attrition amongst sales employees by ",input$attritionRate-40,"% has a direct impact on 
           market sentiments and thus stock price of Mercedes Benz.")
   })  
-  
-  stockcolor <- reactive({
-    ifelse(input$attritionRate < 30, "green", ifelse(input$attritionRate < 60,"Orange","red"))
-  })
-  
-  stockSentiment <- reactive({
-    ifelse(input$attritionRate < 30, "Positive", ifelse(input$attritionRate < 60,"Neutral","Negative"))
-  })
-  
+
   output$stock1 <- renderText({
-    paste('Market Sentiment Meter: <span style=\"color:', stockcolor() ,'\">',stockSentiment(),'</span>')
+    paste('Market Sentiment Meter: <span style=\"color:', 
+          ifelse(input$attritionRate < 30, "green", ifelse(input$attritionRate < 60,"Orange","red"))
+          ,'\">',
+          ifelse(input$attritionRate < 30, "Positive", ifelse(input$attritionRate < 60,"Neutral","Negative"))
+          ,'</span>')
   })
     
   # Showing market sentiment ----
