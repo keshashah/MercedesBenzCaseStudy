@@ -10,8 +10,8 @@ server <- function(input, output) {
     Multiplied by about 16,500 dealerships in the entire Europe, it's an €8 billion-plus problem !!"
   })
   
-  data<-read.table(text=
-                     "sal rev attr
+  industrydata<-read.table(text=
+                   "sal rev attr
                    4  66  0
                    4.25  65  5
                    4.75  64  10
@@ -35,9 +35,9 @@ server <- function(input, output) {
                    0   0  100", header=T)
   
   output$industry1 <- renderPlot({
-    twoord.stackplot(lx=data$attr, rx=data$attr, 
-                     ldata=data$sal,
-                     rdata=data$rev,
+    twoord.stackplot(lx=industrydata$attr, rx=industrydata$attr, 
+                     ldata=industrydata$sal,
+                     rdata=industrydata$rev,
                      lcol="blue",
                      rcol="red", 
                      ltype="o",
@@ -57,7 +57,7 @@ server <- function(input, output) {
 Attrition Of Sales Employee = function2(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
 Car Sale Capacity           = function3(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
 Interest Rates, Insurance Costs, Emission Rules, Export/Import);
-Non-Dealer Factors          = fucntion4(Technology, New Cars Launched, Organizational Model Change);
+Non-Dealer Factors          = function4(Technology, New Cars Launched, Organizational Model Change);
 Voluntary Termination       = function5(Good Attrition, Bad Attrition);
                             = function6(Fresher Attrition, Infant Attrition, 
                                         Key Employees Attrition, Non-performer Attrition);"
@@ -67,10 +67,10 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
   output$bottomline <- renderText({
     "Attrition has a major fall-out on the bottom-line. 
     Bottom-Line = function(Hard costs, Soft costs);
-    Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
+Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
     from creating new position, posting advertisement, checking resume of applicants, interviewing candidates 
     to onbarding and training selected candidates.
-    Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
+Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
     lost sales, unanswered customer calls, decrease in customer satisfaction index, morale of remaining employees
     down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
   })  
@@ -83,19 +83,19 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
   output$bottomline1 <- renderText({
     paste('<span style=\"color:', blcolor() , '\"> Change of Attrition Rate from 40 % to ',input$attritionRate,'% <br>
           will result in change of bottom-line by €',input$turnovercost*150*30*(0.4-input$attritionRate/100),'<br><br>
-          As per Diamler Group 2018 Financial Report, it will impact <br>Return on Sales by ',input$turnovercost*150*30*(0.4-input$attritionRate/100)/10824000*7.8,'% </span>')
+          As per Diamler Group 2018 Financial Report, it will impact <br>Return on Sales by ',round(input$turnovercost*150*30*(0.4-input$attritionRate/100)/10824000*7.8,digits=2),'% </span>')
   })
   
   output$bottomline2 <- renderText({
     paste('Brief Calculation:
           
           At an average dealership:
-          Cost of 1 employee turnover               = €',input$turnovercost,'
-          Average number of sales employees         = 30  
+              Cost of 1 employee turnover                = €',input$turnovercost,'
+              Average number of sales employees          = 30  
           Number of Mercedes Benz Dealers in Germany     = 150
           
-          At 40 % attrition rate, the cost to dealership = €',as.numeric(input$turnovercost*150*30*0.4),'
-          At',input$attritionRate,'% attrition rate, the cost to dealership = €',input$turnovercost*150*30*input$attritionRate/100
+          At 40 % attrition rate, the cost of attrition  = €',as.numeric(input$turnovercost*150*30*0.4),'
+          At',input$attritionRate,'% attrition rate, the cost of attrition  = €',input$turnovercost*150*30*input$attritionRate/100
     )
   })
   
@@ -106,8 +106,33 @@ Voluntary Termination       = function5(Good Attrition, Bad Attrition);
   
   # Output for Tab-3 i.e. customers
   output$customers <- renderText({
-    "Show customers here"
+    paste('Customers trust salesperson who has in-depth knowledge of all car models or have participated in long sales-cycle.
+Studies have shown that even most loyal customers may see sales employee departure as a reason to consider 
+competitive offereing.
+
+Mercedes Benz is trying to reduce the reliance of particular sales employee, by asking dealers to having multiple 
+connections between potential customers and sales employees. It has also developed a centralized platform for 
+capturing customer preferences and tracking sale pipeline, thus ensuring essential information is not lost with 
+departing employee.
+
+While this works for Cold leads, Hot leads are still severly impacted</h4> by attrition of sales employees as below:')
   })  
+  
+  CustomerType <- c("Customers Retained", "Lost Level1 Leads", "Lost Level2 Leads", "New Prospects")
+  newEmpCount <- reactive ({30-(round(input$attritionRate*30/100))})
+  oldAttr <- c(72, 120, 300, 900)
+  newAttr <- reactive ({ c(newEmpCount()*4,(30-newEmpCount())*10,(30-newEmpCount())*25,newEmpCount()*50) })
+  datacust <- reactive({ data.frame(CustomerType, oldAttr, newAttr()) })
+  newname <- reactive({
+    renderText(paste(input$attritionRate,'% Attrition Rate'))
+  })
+
+  output$customers1 <- renderPlotly({
+      plot_ly(data=datacust(), x = ~CustomerType, y = ~oldAttr, type = 'bar', name = '40 % Attrition Rate') %>%
+      add_trace(y = ~newAttr(), name = 'New Attrition Rate') %>%
+      layout(yaxis = list(title = 'Monthly Customers/Dealer',type='log'), barmode = 'group')
+  })  
+
   
   # Output for Tab-4 i.e. employees
   output$employees <- renderText({

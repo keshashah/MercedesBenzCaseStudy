@@ -1,6 +1,7 @@
 library(shiny)
 library(googleVis)
 library(plotrix)
+library(plotly)
 
 ui <- fluidPage(
   
@@ -29,12 +30,12 @@ ui <- fluidPage(
       br(),
       
       h4("What-If Analysis (Other Inputs' Sensitivity):"),
-      br(),
       h5("Bottom-line Sensitivity:"),
       # Input: Numeric entry for number of obs to view ----
       numericInput(inputId = "turnovercost",
                    label = "Cost of 1 Sales Employee Turnover (in €) :",
                    value = 9000)
+      
       
     ),
     
@@ -46,7 +47,7 @@ ui <- fluidPage(
                   tabPanel("Industry Comparision", br(), verbatimTextOutput("industry"), plotOutput("industry1"), verbatimTextOutput("industry2")),
                   tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
                   tabPanel("Sales (MB)", br(), verbatimTextOutput("sales")),
-                  tabPanel("Customers (MB)", br(), verbatimTextOutput("customers")),
+                  tabPanel("Customers (MB)", br(), verbatimTextOutput("customers"),plotlyOutput("customers1")),
                   tabPanel("Employees (MB)", br(), verbatimTextOutput("employees"), h3(htmlOutput("employees1")), column(5, tags$div(id="wc_div", style="width:400px;height:400px;position: relative;top: -20px;"), deliverChart("wc_div"))),
                   tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), br(), h3(htmlOutput("stock1")), htmlOutput("stock2"))
       )
