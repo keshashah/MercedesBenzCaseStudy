@@ -148,13 +148,25 @@ While this works for Cold leads, "Hot leads" are still severly impacted by attri
   
   output$customers1 <- renderPlotly({
       plot_ly(data=data.frame(CustomerType, 
-                              c(30*0.6*input$leadrate, 30*0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100, 30*0.4*input$leadrate*input$prosprate/100, 30*0.4*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100 ), 
-                              c(30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate, 30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100)), 
+                              c(30*0.6*input$leadrate, 
+                                30*0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100, 
+                                30*0.4*input$leadrate*input$prosprate/100, 
+                                30*0.4*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100 ), 
+                              c(30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate, 
+                                30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,
+                                30*round((input$attritionRate/100),digits=2)*input$leadrate*input$prosprate/100,
+                                30*round((input$attritionRate/100),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100)), 
               x = CustomerType, 
-              y = c(30*0.6*input$leadrate, 30*0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100, 30*0.4*input$leadrate*input$prosprate/100, 30*0.4*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100 ), 
+              y = c(30*0.6*input$leadrate, 
+                    30*0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,
+                    30*0.4*input$leadrate*input$prosprate/100, 
+                    30*0.4*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100 ), 
               type = 'bar', name = '40 % Attrition Rate') %>%
       
-      add_trace(y = c(30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate, 30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100,30*1-round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100), 
+      add_trace(y = c(30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate,
+                      30*round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,
+                      30*round((input$attritionRate/100),digits=2)*input$leadrate*input$prosprate/100,
+                      30*round((input$attritionRate/100),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100), 
                 name = 'New Attrition Rate') %>%
       
       layout(yaxis = list(title = 'Monthly Customers/Dealer',type='log'), barmode = 'group')
