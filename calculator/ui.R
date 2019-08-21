@@ -21,7 +21,7 @@ ui <- fluidPage(
       helpText("The industry average for sales turnover in automobile industry dealership is 60%."),
       helpText("Previous Attrition Rate of Mercedes Benz Dealers Across Germany is 40%."),
       
-      # Input: Slider for the number of bins ----
+      # Input: Slider for the attrition rate  ----
       sliderInput(inputId = "attritionRate",
                   label = "New Attrition Rate:",
                   min = 1,
@@ -29,12 +29,45 @@ ui <- fluidPage(
                   value = 20),
       br(),
       h4("What-If Analysis (Other Inputs' Sensitivity):"),
-      h5("Bottom-line Sensitivity:"),
+      br(),
+      h4("Bottom-Line Sensitivity:"),
+      h5("Variable = Hiring and Retention Cost "),
       # Input: Numeric entry for number of obs to view ----
       numericInput(inputId = "turnovercost",
                    label = "Cost of 1 Sales Employee Turnover (in €) :",
-                   value = 9000)
+                   value = 9000),
       
+      br(),
+      h4("Sales and Customers Senstivity:"),
+      h3("Variable = Sales Funnel Conversion Cost"),
+      
+      # Input: Slider for leads conversion ----
+      sliderInput(inputId = "leadrate",
+                  label = "Lead Conversion Rate:",
+                  min = 60,
+                  max = 80,
+                  value = 60),
+      
+      # Input: Slider for prospect conversion ----
+      sliderInput(inputId = "prosprate",
+                  label = "Prospect Conversion Rate:",
+                  min = 25,
+                  max = 40,
+                  value = 25),
+      
+      # Input: Slider for testdrive conversion ----
+      sliderInput(inputId = "tdrate",
+                  label = "Test-Drive Conversion Rate:",
+                  min = 70,
+                  max = 90,
+                  value = 70),
+      
+      # Input: Slider for prospect conversion ----
+      sliderInput(inputId = "salerate",
+                  label = "Sale Conversion Rate:",
+                  min = 60,
+                  max = 80,
+                  value = 60)
     ),
     
     # Main panel for displaying outputs ----

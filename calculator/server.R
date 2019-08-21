@@ -133,19 +133,26 @@ where
     doing a better(poor) job of converting existing leads to successful sales."
   })  
   
-  empret <- reactive({round(1-(input$attritionRate/100),digits = 2)})
+  empret <- reactive({   round((1-(input$attritionRate/100)),digits=2)   })
+  empattr <- reactive({   1-empret() })
   
-  ZeroAttritionRate <- c(round(30*1*0.6,digits = 2), round(30*1*0.6*0.25,digits=2), round(30*1*0.6*0.25*0.7,digits = 2), round(30*1*0.6*0.25*0.7*0.6,digits = 2))
-  OldAttritionRate <- c(round(30*0.6*0.6,digits = 2), round(30*0.6*0.6*0.25,digits=2), round(30*0.6*0.6*0.25*0.7,digits = 2), round(30*0.6*0.6*0.25*0.7*0.6,digits = 2))
+  leadconv <- reactive({ input$leadrate })
+  prospconv <- reactive({ leadconv()*input$prosprate/100 })
+  tdconv <- reactive({ prospconv()*input$tdrate/100 })
+  salesconv <- reactive({ tdconv()*input$salerate/100 })
+  
+  ZeroAttritionRate <- reactive({ c(round(1*leadconv(),digits = 2), round(1*prospconv(),digits=2), round(1*tdconv(),digits = 2), round(1*salesconv(),digits = 2)) })
+  OldAttritionRate <- reactive({ c(round(0.6*leadconv(),digits = 2), round(0.6*prospconv(),digits=2), round(0.6*tdconv(),digits = 2), round(0.6*salesconv(),digits = 2)) })
   NewAttritionRate <-  reactive({
-    c(round(30*empret()*0.6,digits = 2), round(30*empret()*0.6*0.25,digits=2), round(30*empret()*0.6*0.25*0.7,digits = 2), round(30*empret()*0.6*0.25*0.7*0.6,digits = 2))
+    c(round(empret()*leadconv(),digits = 2), round(empret()*prospconv(),digits=2), round(empret()*tdconv(),digits = 2), round(empret()*salesconv(),digits = 2))
   })
   
   salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
   
   observeEvent(input$attritionRate, {
-    salesFunneldat$df_data <- data.frame(ZeroAttritionRate, OldAttritionRate, NewAttritionRate())
+    salesFunneldat$df_data <- data.frame(ZeroAttritionRate(), OldAttritionRate(), NewAttritionRate())
     row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
+    
     renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "circle", line.width = 5, theme = "shine")
   })
   
@@ -163,18 +170,18 @@ Thus it tries to ensure essential information is not lost with departing employe
 While this works for Cold leads, "Hot leads" are still severly impacted by attrition of sales employees as below:')
   })  
   
-  CustomerType <- c("Customers Retained", "Lost Level1 Prospects", "Lost Level2 Prospects", "New Leads")
-  newEmpCount <- reactive ({30-(round(input$attritionRate*30/100))})
-  oldAttr <- c(72, 120, 300, 900)
-  newAttr <- reactive ({ c(newEmpCount()*4,(30-newEmpCount())*10,(30-newEmpCount())*25,newEmpCount()*50) })
-  datacust <- reactive({ data.frame(CustomerType, oldAttr, newAttr()) })
+  CustomerType <- c("New Leads", "Customers Retained", "Lost Prospects", "Lost Sales")
+  
+  oldAttr <- reactive ({ c(30*0.6*leadconv(), 30*0.6*salesconv(), 30*0.4*prospconv(), 30*0.4*salesconv() )  })
+  newAttr <- reactive ({ c(30*empret()*leadconv(), 30*empret()*salesconv(),30*empattr()*prospconv(),30*empattr()*salesconv()) })
+  datacust <- reactive({ data.frame(CustomerType, oldAttr(), newAttr()) })
   newname <- reactive({
     renderText(paste(input$attritionRate,'% Attrition Rate'))
   })
 
   output$customers1 <- renderPlotly({
-      plot_ly(data=datacust(), x = ~CustomerType, y = ~oldAttr, type = 'bar', name = '40 % Attrition Rate') %>%
-      add_trace(y = ~newAttr(), name = 'New Attrition Rate') %>%
+      plot_ly(data=datacust(), x = CustomerType, y = oldAttr(), type = 'bar', name = '40 % Attrition Rate') %>%
+      add_trace(y = newAttr(), name = 'New Attrition Rate') %>%
       layout(yaxis = list(title = 'Monthly Customers/Dealer',type='log'), barmode = 'group')
   })  
 
