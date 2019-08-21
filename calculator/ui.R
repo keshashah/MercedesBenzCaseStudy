@@ -18,7 +18,7 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       # Include clarifying text ----
-      helpText("The industry average for sales turnover in automobile industry dealership is 60%."),
+      h3("The industry average for sales turnover in automobile industry dealership is 60%."),
       helpText("Previous Attrition Rate of Mercedes Benz Dealers Across Germany is 40%."),
       
       # Input: Slider for the attrition rate  ----
