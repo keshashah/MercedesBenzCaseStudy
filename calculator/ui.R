@@ -39,7 +39,7 @@ ui <- fluidPage(
       
       br(),
       h4("Sales and Customers Senstivity:"),
-      h3("Variable = Sales Funnel Conversion Cost"),
+      h5("Variable = Sales Funnel Conversion Rate"),
       
       # Input: Slider for leads conversion ----
       sliderInput(inputId = "leadrate",
