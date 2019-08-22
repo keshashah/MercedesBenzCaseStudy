@@ -42,9 +42,9 @@ server <- function(input, output) {
                      rcol="red", 
                      ltype="o",
                      rtype="l",
-                     lylab="Monthly Cars Sold/Sales Employee", rylab="Annual Dealer's Revenue (million €)", 
-                     xlab="Sales Employee Attrition Rate",
-                     main="Average Dealer's Throughput(sales/employee) and Revenue graph vs Attrition of Sales Employees Graph.",
+                     lylab="Average Monthly Cars Sold/Sales Employee", rylab="Annual Dealer's Revenue (billion Rs.)", 
+                     xlab="Sales Employee Attrition Rate (%)",
+                     main="Source: Study from Globe Ecologistics Pvt. Ltd., India",
                      border="grey80",
                      leftfront = TRUE,
                      incrylim=0.5,
@@ -120,10 +120,11 @@ where
   
   salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
   
-  observeEvent(input$attritionRate, {
-    salesFunneldat$df_data <- data.frame(ZeroAttrition = c(round(1*input$leadrate,digits = 2), round(1*input$leadrate*input$prosprate/100,digits=2), round(1*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 2), round(1*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 2)), 
-                                         OldAttrition = c(round(0.6*input$leadrate,digits = 2), round(0.6*input$leadrate*input$prosprate/100,digits=2), round(0.6*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 2), round(0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 2)), 
-                                         NewAttrition = c(round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate,digits = 2), round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100,digits=2), round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 2), round(round((1-(input$attritionRate/100)),digits=2)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 2)))
+  observeEvent(c(input$attritionRate,
+                 input$leadrate, input$prosprate, input$tdrate, input$salerate),{
+    salesFunneldat$df_data <- data.frame(ZeroAttrition = c(round(1*input$leadrate,digits = 3), round(1*input$leadrate*input$prosprate/100,digits=3), round(1*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 3), round(1*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 3)), 
+                                         OldAttrition = c(round(0.6*input$leadrate,digits = 3), round(0.6*input$leadrate*input$prosprate/100,digits=3), round(0.6*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 3), round(0.6*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 3)), 
+                                         NewAttrition = c(round(round((1-(input$attritionRate/100)),digits=3)*input$leadrate,digits = 3), round(round((1-(input$attritionRate/100)),digits=3)*input$leadrate*input$prosprate/100,digits=3), round(round((1-(input$attritionRate/100)),digits=3)*input$leadrate*input$prosprate/100*input$tdrate/100,digits = 3), round(round((1-(input$attritionRate/100)),digits=3)*input$leadrate*input$prosprate/100*input$tdrate/100*input$salerate/100,digits = 3)))
     
     row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
     

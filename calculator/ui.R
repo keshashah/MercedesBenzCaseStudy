@@ -18,7 +18,6 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       # Include clarifying text ----
-      h3("The industry average for sales turnover in automobile industry dealership is 60%."),
       helpText("Previous Attrition Rate of Mercedes Benz Dealers Across Germany is 40%."),
       
       # Input: Slider for the attrition rate  ----
@@ -31,7 +30,7 @@ ui <- fluidPage(
       h4("What-If Analysis (Other Inputs' Sensitivity):"),
       br(),
       h4("Bottom-Line Sensitivity:"),
-      h5("Variable = Hiring and Retention Cost "),
+      h5("Variable = Hiring and Training Cost "),
       # Input: Numeric entry for number of obs to view ----
       numericInput(inputId = "turnovercost",
                    label = "Cost of 1 Sales Employee Turnover (in €) :",
@@ -75,7 +74,7 @@ ui <- fluidPage(
       
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
-                  tabPanel("Market Comparision", br(), plotOutput("industry1"), verbatimTextOutput("industry2")),
+                  tabPanel("Market Comparision", h4("The industry average for sales turnover in automobile industry dealership is 60%."), plotOutput("industry1"), verbatimTextOutput("industry2")),
                   tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
                   tabPanel("Sales (MB)", verbatimTextOutput("sales2"), h3(htmlOutput("sales3")), verbatimTextOutput("sales"),br(),column(6,tags$div(id="sales1", style="width:500px;height:400px;position: relative;top: -20px;"), deliverChart(div_id = "sales1"))),
                   tabPanel("Customers (MB)", br(), verbatimTextOutput("customers"),plotlyOutput("customers1")),
