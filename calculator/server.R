@@ -44,7 +44,7 @@ server <- function(input, output) {
                      rtype="l",
                      lylab="Monthly Cars Sold/Sales Employee", rylab="Annual Dealer's Revenue (million €)", 
                      xlab="Sales Employee Attrition Rate",
-                     main="Industry-wide Dealer's Throughput(sales/employee) and Revenue graph vs Attrition of Sales Employees Graph.",
+                     main="Average Dealer's Throughput(sales/employee) and Revenue graph vs Attrition of Sales Employees Graph.",
                      border="grey80",
                      leftfront = TRUE,
                      incrylim=0.5,
