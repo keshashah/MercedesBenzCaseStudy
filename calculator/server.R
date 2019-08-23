@@ -97,21 +97,20 @@ down, productivity loss, etc. A conservative estimate of soft cost by experts is
   
   # Output for Tab-2 i.e. sales
   output$sales2 <- renderText({
-    "Return on Investment (ROI)=  (Profit from Sales – Expense Incurred for Sale) / Expense Incurred for Sale;
-    where 
-    Expense Incurred for Sale = function1(Fixed cost, Variable cost)
-    Variable cost = function2(Salary of sales employees = minimum fixed base wage + variable sales commisions)"
+    "Return on Investment (ROI)=  (Profit from Sales – Expense Inc. Salary Paid) / Expense Inc. Salary Paid;
+    Source: https://9clouds.com/blog/how-to-measure-online-roi-with-a-sales-funnel"
   }) 
   
   output$sales3 <- renderText({
-    paste('<span style=\"color:', ifelse(0.078*(40-input$attritionRate) < 0, "red", "green") , '\"> Change in ROI = ',0.078*(40-input$attritionRate),'% when attrition changes from 40 % to ',input$attritionRate,'%, thus ',ifelse(0.078*(40-input$attritionRate) < 0, "NEGATIVELY", "POSITIVELY"),
+    paste('<span style=\"color:', ifelse(0.078*(40-input$attritionRate) < 0, "red", "green") , '\"> Change in ROI = ',0.078*(40-input$attritionRate),'%, thus ',ifelse(0.078*(40-input$attritionRate) < 0, "NEGATIVELY", "POSITIVELY"),
           ' impacting dealer profitability.</span>')
   })  
   
   output$sales <- renderText({
     "Change in attrition rate of sales employees impacts the sales twofold - 1. number of leads 2. conversion to sales. 
-    A decrease(increase) in attrition rate will increase(decreases) sales by attracting(losing) more leads as well as
-    doing a better(poor) job of converting existing leads to successful sales."
+    
+A decrease(increase) in attrition rate will increase(decreases) sales by attracting(losing) more leads as well as 
+doing a better(poor) job of converting existing leads to successful sales."
   })  
   
   salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
@@ -129,16 +128,7 @@ down, productivity loss, etc. A conservative estimate of soft cost by experts is
   
   # Output for Tab-3 i.e. customers
   output$customers <- renderText({
-    paste('Customers trust salesperson who has in-depth knowledge of all models and have participated in long sales-cycle.
-          Studies have shown that even most loyal customers may see sales employee departure as a reason to consider 
-          competitive offereing.
-          
-          Mercedes Benz is trying to reduce the reliance on a particular sales employee by-
-          1. Asking dealers to having multiple connections between potential customers and sales employees. 
-          2. Having centralized platform for capturing customer preferences and tracking sale pipeline.
-          Thus it tries to ensure essential information is not lost with departing employee.
-          
-          While this works for Cold leads, "Hot leads" are still severly impacted by attrition of sales employees as below:')
+    paste('Customers trust salesperson and "Hot leads" are impacted by attrition of sales employees as below:')
   })  
   
   CustomerType <- c("New Leads", "Customers Retained", "Lost Prospects", "Lost Sales")
@@ -170,13 +160,16 @@ down, productivity loss, etc. A conservative estimate of soft cost by experts is
   })  
   
   # Output for Tab-4 i.e. employees
+  output$employees0 <- renderText({
+    "The attrition rate among organizations is contagious and triggers chain reaction."
+  })
+  
   output$employees <- renderText({
-    "The attrition rate among organizations is contagious and triggers chain reaction.
-    A high attrition rate will lead to more people leaving the organization, while
-    lower attrition will act as retention strategy.
-    
-    1. Co-employees need to cope-up and work overtime to maintain the same productivity for dealer and sell more cars.
-    2. Existing employees are more aware of outside job opportunities from network of former colleagues."
+    "With high attrition rate, 
+    1. Co-employees need to cope-up existing sales pipeline and work overtime.
+    2. They are more aware of outside job opportunities from network of former colleagues.
+
+Lower attrition rate = retention strategy."
   })  
   
   output$employees1 <- renderText({
@@ -189,8 +182,7 @@ down, productivity loss, etc. A conservative estimate of soft cost by experts is
             min(100,round(input$attritionRate + (100*(input$attritionRate-40)/(100-input$attritionRate)/(100-input$attritionRate)),digits=0)),
             max(0,round(input$attritionRate + (100*(input$attritionRate-40)/(input$attritionRate*input$attritionRate)),digits=0))
           )
-          ,'% soon.<br></span>
-          <br>Thoughts of remaining employees: </h3>')
+          ,'% soon.<br></span>')
   })
   
   sample_employee_emotion <- data.frame(name = c("Job satisfaction", "Salary", "Perks", "Work environment",
@@ -209,9 +201,7 @@ down, productivity loss, etc. A conservative estimate of soft cost by experts is
   
   # Output for Tab-4 i.e. employees
   output$stock <- renderText({
-    paste("The attrition change from 40% to", input$attritionRate, "%.
-          Thus a change in attrition amongst sales employees by ",input$attritionRate-40,"% has a direct impact on 
-          market sentiments and thus stock price of Mercedes Benz.")
+    paste("The attrition rate has a direct impact on market sentiments and thus stock price of Mercedes Benz.")
   })  
   
   output$stock1 <- renderText({

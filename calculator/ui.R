@@ -81,11 +81,11 @@ ui <- fluidPage(
       # Output: Tabset w/ plot, summary, and table ----
       tabsetPanel(type = "tabs",
                  # tabPanel("Market Comparision", h4("The industry average for sales turnover in automobile industry dealership is 60%."), plotOutput("industry1"), verbatimTextOutput("industry2")),
-                  tabPanel("Bottom-Line (MB)", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
-                  tabPanel("Sales (MB)", h3(htmlOutput("sales3")), verbatimTextOutput("sales2"), br(), verbatimTextOutput("sales"), column(6,tags$div(id="sales1", style="width:500px;height:400px;position: relative;top: -5px;"), deliverChart(div_id = "sales1"))),
-                  tabPanel("Customers (MB)", br(), verbatimTextOutput("customers"),plotlyOutput("customers1")),
-                  tabPanel("Employees (MB)", br(), verbatimTextOutput("employees"), h3(htmlOutput("employees1")), column(5, tags$div(id="wc_div", style="width:400px;height:400px;position: relative;top: -20px;"), deliverChart("wc_div"))),
-                  tabPanel("Stock (MB)", br(), verbatimTextOutput("stock"), br(), h3(htmlOutput("stock1")), htmlOutput("stock2"))
+                  tabPanel("Bottom-Line", br(), verbatimTextOutput("bottomline"), h3(htmlOutput("bottomline1")), br(), verbatimTextOutput("bottomline2")),
+                  tabPanel("Sales", h3(htmlOutput("sales3")), verbatimTextOutput("sales2"), br(), verbatimTextOutput("sales"), column(6,tags$div(id="sales1", style="width:500px;height:400px;position: relative;top: -5px;"), deliverChart(div_id = "sales1"))),
+                  tabPanel("Customers", br(), verbatimTextOutput("customers"),plotlyOutput("customers1")),
+                  tabPanel("Employees", br(), verbatimTextOutput("employees0"), h3(htmlOutput("employees1")), verbatimTextOutput("employees"), column(5, tags$div(id="wc_div", style="width:400px;height:400px;position: relative;top: -10px;"), deliverChart("wc_div"))),
+                  tabPanel("Stock", br(), verbatimTextOutput("stock"), br(), h3(htmlOutput("stock1")), htmlOutput("stock2"))
       )
     )
   )
