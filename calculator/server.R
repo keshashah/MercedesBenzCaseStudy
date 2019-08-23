@@ -54,27 +54,26 @@ server <- function(input, output) {
   
   output$industry2 <- renderText({
     "Dealer's Profitability      = f(Attrition Of Sales Employee);
-    Attrition Of Sales Employee = f(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
-    Car Sale Capacity           = f(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
-    Interest Rates, Insurance Costs, Emission Rules, Export/Import);
-    Non-Dealer Factors          = f(Technology, New Cars Launched, Organizational Model Change);
-    Voluntary Termination       = f(Good Attrition, Bad Attrition);
-    = f(Fresher Attrition, Infant Attrition, 
-    Key Employees Attrition, Non-performer Attrition);"
+Attrition Of Sales Employee = f(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
+Car Sale Capacity           = f(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
+                                Interest Rates, Insurance Costs, Emission Rules, Export/Import);
+Non-Dealer Factors          = f(Technology, New Cars Launched, Organizational Model Change);
+Voluntary Termination       = f(Good Attrition, Bad Attrition);
+                            = f(Fresher Attrition, Infant Attrition, Key Employees Attrition, 
+                                Non-performer Attrition);"
   })
   
   # Output for Tab-1 i.e. bottomline
   output$bottomline <- renderText({
-    "Attrition has a major fall-out on the bottom-line. 
-    Bottom-Line = function(Hard costs, Soft costs);
+    "Bottom-Line = function(Hard costs, Soft costs);
     
-    Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
-    from creating new position, posting advertisement, checking resume of applicants, interviewing candidates 
-    to onbarding and training selected candidates.
+Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
+from creating new position, posting advertisement, checking resume of applicants, interviewing candidates 
+to onbarding and training selected candidates.
     
-    Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
-    lost sales, unanswered customer calls, decrease in customer satisfaction index, morale of remaining employees
-    down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
+Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
+lost sales, unanswered customer calls, decrease in customer satisfaction index, morale of remaining employees
+down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
   })  
   
   output$bottomline1 <- renderText({
@@ -98,10 +97,7 @@ server <- function(input, output) {
   
   # Output for Tab-2 i.e. sales
   output$sales2 <- renderText({
-    "Knowing conversion rate in sales funnel, profit per sale and sales commision paid to employees as expense, 
-    we can calculate the return on investment(ROI) for retaining a sales employee.
-    
-    Return on Investment (ROI)=  (Profit from Sales – Expense Incurred for Sale) / Expense Incurred for Sale;
+    "Return on Investment (ROI)=  (Profit from Sales – Expense Incurred for Sale) / Expense Incurred for Sale;
     where 
     Expense Incurred for Sale = function1(Fixed cost, Variable cost)
     Variable cost = function2(Salary of sales employees = minimum fixed base wage + variable sales commisions)"
@@ -128,7 +124,7 @@ server <- function(input, output) {
                    
                    row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
                    
-                   renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "circle", line.width = 5, theme = "shine")
+                   renderRadarChart("sales1", data = salesFunneldat$df_data, shape = "default", line.width = 5, show.legend = TRUE, theme = "shine")
                  })
   
   # Output for Tab-3 i.e. customers
@@ -235,3 +231,4 @@ server <- function(input, output) {
                            redFrom=20.1, redTo=60, width=300, height=300));  
   }) 
   }
+  
