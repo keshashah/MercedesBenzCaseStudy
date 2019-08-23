@@ -121,10 +121,10 @@ server <- function(input, output) {
   salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))
   
   observeEvent(c(input$attritionRate,
-                 60, 25, 70, input$salerate),{
-                   salesFunneldat$df_data <- data.frame(ZeroAttrition = c(round(1*60,digits = 3), round(1*60*25/100,digits=3), round(1*60*25/100*70/100,digits = 3), round(1*60*25/100*70/100*input$salerate/100,digits = 3)), 
-                                                        OldAttrition = c(round(0.6*60,digits = 3), round(0.6*60*25/100,digits=3), round(0.6*60*25/100*70/100,digits = 3), round(0.6*60*25/100*70/100*input$salerate/100,digits = 3)), 
-                                                        NewAttrition = c(round(round((1-(input$attritionRate/100)),digits=3)*60,digits = 3), round(round((1-(input$attritionRate/100)),digits=3)*60*25/100,digits=3), round(round((1-(input$attritionRate/100)),digits=3)*60*25/100*70/100,digits = 3), round(round((1-(input$attritionRate/100)),digits=3)*60*25/100*70/100*input$salerate/100,digits = 3)))
+                 60, 25, 70, input$salerate*input$salerate/100),{
+                   salesFunneldat$df_data <- data.frame(ZeroAttrition = c(round(1*60,digits = 3), round(1*60*25/100,digits=3), round(1*60*25/100*70/100,digits = 3), round(1*60*25/100*70/100*input$salerate*input$salerate/100/100,digits = 3)), 
+                                                        OldAttrition = c(round(0.6*60,digits = 3), round(0.6*60*25/100,digits=3), round(0.6*60*25/100*70/100,digits = 3), round(0.6*60*25/100*70/100*input$salerate*input$salerate/100/100,digits = 3)), 
+                                                        NewAttrition = c(round(round((1-(input$attritionRate/100)),digits=3)*60,digits = 3), round(round((1-(input$attritionRate/100)),digits=3)*60*25/100,digits=3), round(round((1-(input$attritionRate/100)),digits=3)*60*25/100*70/100,digits = 3), round(round((1-(input$attritionRate/100)),digits=3)*60*25/100*70/100*input$salerate*input$salerate/100/100,digits = 3)))
                    
                    row.names(salesFunneldat$df_data) <- c("% Leads", "% Prospect", "% Test Drive", "% Sales Made")
                    
@@ -150,24 +150,24 @@ server <- function(input, output) {
   output$customers1 <- renderPlotly({
     plot_ly(data=data.frame(CustomerType, 
                             c(30*0.6*60, 
-                              30*0.6*60*25/100*70/100*input$salerate*input$salerate/100, 
+                              30*0.6*60*25/100*70/100*input$salerate*input$salerate/100/100, 
                               30*0.4*60*25/100, 
-                              30*0.4*60*25/100*70/100*input$salerate*input$salerate/100 ), 
+                              30*0.4*60*25/100*70/100*input$salerate*input$salerate/100/100 ), 
                             c(30*round((1-(input$attritionRate/100)),digits=2)*60, 
-                              30*round((1-(input$attritionRate/100)),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100,
+                              30*round((1-(input$attritionRate/100)),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100/100,
                               30*round((input$attritionRate/100),digits=2)*60*25/100,
-                              30*round((input$attritionRate/100),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100)), 
+                              30*round((input$attritionRate/100),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100/100)), 
             x = CustomerType, 
             y = c(30*0.6*60, 
-                  30*0.6*60*25/100*70/100*input$salerate*input$salerate/100,
+                  30*0.6*60*25/100*70/100*input$salerate*input$salerate/100/100,
                   30*0.4*60*25/100, 
-                  30*0.4*60*25/100*70/100*input$salerate*input$salerate/100 ), 
+                  30*0.4*60*25/100*70/100*input$salerate*input$salerate/100/100 ), 
             type = 'bar', name = '40 % Attrition Rate') %>%
       
       add_trace(y = c(30*round((1-(input$attritionRate/100)),digits=2)*60,
-                      30*round((1-(input$attritionRate/100)),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100,
+                      30*round((1-(input$attritionRate/100)),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100/100,
                       30*round((input$attritionRate/100),digits=2)*60*25/100,
-                      30*round((input$attritionRate/100),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100), 
+                      30*round((input$attritionRate/100),digits=2)*60*25/100*70/100*input$salerate*input$salerate/100/100), 
                 name = 'New Attrition Rate') %>%
       
       layout(yaxis = list(title = 'Monthly Customers/Dealer',type='log'), barmode = 'group')
