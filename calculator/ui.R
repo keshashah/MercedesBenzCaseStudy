@@ -47,25 +47,25 @@ ui <- fluidPage(
       h5("Variable = Sales Funnel Conversion Rate"),
       
       # Input: Slider for leads conversion ----
-      sliderInput(inputId = "leadrate",
-                  label = "Lead Conversion Rate:",
-                  min = 60,
-                  max = 80,
-                  value = 60),
+      #sliderInput(inputId = "leadrate",
+      #            label = "Lead Conversion Rate:",
+      #            min = 60,
+      #            max = 80,
+      #            value = 60),
       
       # Input: Slider for prospect conversion ----
-      sliderInput(inputId = "prosprate",
-                  label = "Prospect Conversion Rate:",
-                  min = 25,
-                  max = 40,
-                  value = 25),
+      #sliderInput(inputId = "prosprate",
+      #            label = "Prospect Conversion Rate:",
+      #            min = 25,
+      #            max = 40,
+      #            value = 25),
       
       # Input: Slider for testdrive conversion ----
-      sliderInput(inputId = "tdrate",
-                  label = "Test-Drive Conversion Rate:",
-                  min = 70,
-                  max = 90,
-                  value = 70),
+      #sliderInput(inputId = "tdrate",
+      #            label = "Test-Drive Conversion Rate:",
+      #            min = 70,
+      #            max = 90,
+      #            value = 70),
       
       # Input: Slider for prospect conversion ----
       sliderInput(inputId = "salerate",
