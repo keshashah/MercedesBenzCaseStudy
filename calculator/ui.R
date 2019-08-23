@@ -9,6 +9,11 @@ ui <- fluidPage(
   # We HAVE TO to load the ECharts javascript library in advance
   loadEChartsLibrary(),
   
+  # strong horizonal line break
+  tags$head(
+    tags$style(HTML("hr {border-top: 1px solid #000000;}"))
+  ),
+  
   # App title ----
   titlePanel("Mercedes Benz Dealership Sales Employee Attrition Impact Analysis"),
   
@@ -18,7 +23,7 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       # Include clarifying text ----
-      helpText("Previous Attrition Rate of Mercedes Benz Dealers Across Germany is 40%."),
+      h4("Previous Attrition Rate of Mercedes Benz Dealers Across Germany is 40%."),
       
       # Input: Slider for the attrition rate  ----
       sliderInput(inputId = "attritionRate",
@@ -26,6 +31,7 @@ ui <- fluidPage(
                   min = 1,
                   max = 100,
                   value = 20),
+      strong(hr()),
       br(),
       h4("What-If Analysis (Other Inputs' Sensitivity):"),
       br(),
