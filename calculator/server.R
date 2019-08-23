@@ -4,65 +4,6 @@ server <- function(input, output) {
   # To turn off numeric output in scientific notations.. View whole numbers.
   options(scipen=999)
   
-  # Output for Tab-0 i.e. industry
-  output$industry <- renderText({
-    "According to Recent Study, 10-point increase in turnover costs avg dealership €500,000 in gross profit annually.
-    Multiplied by about 16,500 dealerships in the entire Europe, it's an €8 billion-plus problem !!"
-  })
-  
-  industrydata<-read.table(text=
-                             "sal rev attr
-                           4  66  0
-                           4.25  65  5
-                           4.75  64  10
-                           5  62  15
-                           5.75  60  20
-                           6  57  25
-                           5.5  53  30
-                           5  49  35
-                           4.5  45  40
-                           4.25  42  45
-                           4  39  50
-                           3.5  37  55
-                           3  34  60
-                           2.5  30  65
-                           2  26  70
-                           1.5  22  75
-                           1  18  80
-                           0.7  14  85
-                           0.5  10  90
-                           0.3   5  95
-                           0   0  100", header=T)
-  
-  output$industry1 <- renderPlot({
-    twoord.stackplot(lx=industrydata$attr, rx=industrydata$attr, 
-                     ldata=industrydata$sal,
-                     rdata=industrydata$rev,
-                     lcol="blue",
-                     rcol="red", 
-                     ltype="o",
-                     rtype="l",
-                     lylab="Average Monthly Cars Sold/Sales Employee", rylab="Annual Dealer's Revenue (billion Rs.)", 
-                     xlab="Sales Employee Attrition Rate (%)",
-                     main="Source: Study from Globe Ecologistics Pvt. Ltd., India",
-                     border="grey80",
-                     leftfront = TRUE,
-                     incrylim=0.5,
-                     halfwidth=0.5
-    )  
-  })
-  
-  output$industry2 <- renderText({
-    "Dealer's Profitability      = f(Attrition Of Sales Employee);
-Attrition Of Sales Employee = f(Voluntary Individual Termination, Car Sale Capacity, Non-Dealer Factors);
-Car Sale Capacity           = f(Industry Downturn, Labor Market,  Government Regulations, Tax, Fuel price,
-                                Interest Rates, Insurance Costs, Emission Rules, Export/Import);
-Non-Dealer Factors          = f(Technology, New Cars Launched, Organizational Model Change);
-Voluntary Termination       = f(Good Attrition, Bad Attrition);
-                            = f(Fresher Attrition, Infant Attrition, Key Employees Attrition, 
-                                Non-performer Attrition);"
-  })
-  
   # Output for Tab-1 i.e. bottomline
   output$bottomline <- renderText({
     "Bottom-Line = function(Hard costs, Soft costs);
