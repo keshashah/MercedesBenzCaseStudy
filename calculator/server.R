@@ -8,13 +8,12 @@ server <- function(input, output) {
   output$bottomline <- renderText({
     "Bottom-Line = function(Hard costs, Soft costs);
     
-Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured 
-from creating new position, posting advertisement, checking resume of applicants, interviewing candidates 
-to onbarding and training selected candidates.
+Hard costs are quantifiable costs related to hiring and training expenses, which includes expenses incured from creating new position, 
+posting advertisement, checking resume of applicants, interviewing candidates to onbarding and training selected candidates.
     
-Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes
-lost sales, unanswered customer calls, decrease in customer satisfaction index, morale of remaining employees
-down, productivity loss, etc. A conservative estimate of soft cost by experts is twice that of hard costs."
+Soft cost are difficult to quantify as they are due to the lost opportunity cost and includes lost sales, unanswered customer calls, 
+decrease in customer satisfaction index, morale of remaining employees down, productivity loss, etc. 
+A conservative estimate of soft cost by experts is twice that of hard costs."
   })  
   
   output$bottomline1 <- renderText({
@@ -51,7 +50,9 @@ At',input$attritionRate,'% attrition rate, the cost of attrition  = €',input$t
     "Change in attrition rate of sales employees impacts the sales twofold - 1. number of leads 2. conversion to sales. 
     
 A decrease(increase) in attrition rate will increase(decreases) sales by attracting(losing) more leads as well as 
-doing a better(poor) job of converting existing leads to successful sales."
+doing a better(poor) job of converting existing leads to successful sales.
+    
+Average MB sales funnel has 4 layers and the converstion rate at each of the layer is 60%, 25%, 70% and 60% respectively."
   })  
   
   salesFunneldat <- reactiveValues(df_data = data.frame(c(0,0,0,0),c(0,0,0,0),c(0,0,0,0)))

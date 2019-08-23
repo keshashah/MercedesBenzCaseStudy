@@ -23,7 +23,7 @@ ui <- fluidPage(
     # Sidebar panel for inputs ----
     sidebarPanel(
       # Include clarifying text ----
-      h4("Previous Attrition Rate of Mercedes Benz Dealers Across Germany is 40%."),
+      h4("Previous Attrition Rate = 40%."),
       
       # Input: Slider for the attrition rate  ----
       sliderInput(inputId = "attritionRate",
