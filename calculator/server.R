@@ -26,13 +26,13 @@ down, productivity loss, etc. A conservative estimate of soft cost by experts is
   output$bottomline2 <- renderText({
     paste('Brief Calculation:
           
-          At an average dealership:
+At an average dealership:
           Cost of 1 employee turnover                = €',input$turnovercost,'
           Average number of sales employees          = 30  
-          Number of Mercedes Benz Dealers in Germany     = 150
+          Number of Mercedes Benz Dealers in Germany = 150
           
-          At 40 % attrition rate, the cost of attrition  = €',as.numeric(input$turnovercost*150*30*0.4),'
-          At',input$attritionRate,'% attrition rate, the cost of attrition  = €',input$turnovercost*150*30*input$attritionRate/100
+At 40 % attrition rate, the cost of attrition  = €',as.numeric(input$turnovercost*150*30*0.4),'
+At',input$attritionRate,'% attrition rate, the cost of attrition  = €',input$turnovercost*150*30*input$attritionRate/100
     )
   })
   
